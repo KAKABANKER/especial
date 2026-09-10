@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uma pergunta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f7f3f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 56px 48px;
+            max-width: 620px;
+            width: 100%;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            border: 1px solid #ece6e1;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            color: #2e2a27;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin-bottom: 32px;
+        }
+
+        .message {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: #4a4440;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .message p {
+            margin-bottom: 18px;
+        }
+
+        .message p:last-child {
+            margin-bottom: 0;
+            color: #2e2a27;
+        }
+
+        .question {
+            font-size: 1.35rem;
+            color: #2e2a27;
+            margin-bottom: 40px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            min-height: 70px;
+            position: relative;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 16px 44px;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+
+        .btn-sim {
+            background: #2e2a27;
+            color: #ffffff;
+        }
+
+        .btn-sim:hover {
+            background: #4a4440;
+        }
+
+        .btn-nao {
+            background: #ffffff;
+            color: #4a4440;
+            border: 1px solid #d8d0ca;
+            position: relative;
+        }
+
+        .btn-nao:hover {
+            background: #faf7f5;
+        }
+
+        .feedback {
+            margin-top: 36px;
+            font-size: 1.05rem;
+            color: #2e2a27;
+            line-height: 1.7;
+            min-height: 40px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid #ece6e1;
+            font-size: 0.85rem;
+            color: #a89f98;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 520px) {
+            .card {
+                padding: 40px 24px;
+                border-radius: 12px;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+            .message {
+                font-size: 1rem;
+                line-height: 1.8;
+            }
+            .question {
+                font-size: 1.15rem;
+            }
+            .buttons {
+                gap: 14px;
+            }
+            .btn {
+                padding: 14px 28px;
+                font-size: 0.95rem;
+                min-width: 110px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Oi</h1>
+
+        <div class="message">
+            <p>Eu precisava te dizer uma coisa.</p>
+            <p>Eu gosto de você. De verdade.</p>
+            <p>E estou com saudade da sua companhia, do seu jeito, da gente junto.</p>
+            <p>Queria saber quando a gente pode se ver, sair, passar um tempo juntos.</p>
+        </div>
+
+        <div class="question">
+            Podemos marcar?
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-sim" id="btnSim">Sim</button>
+            <button class="btn btn-nao" id="btnNao">Não</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="footer">
+            feito para você
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const btnSim = document.getElementById('btnSim');
+            const btnNao = document.getElementById('btnNao');
+            const feedback = document.getElementById('feedback');
+
+            const frases = [
+                'Não',
+                'Tem certeza?',
+                'Pensa bem',
+                'Não faz isso',
+                'Vou ficar triste',
+                'Só um pouquinho?',
+                'Tô com saudade',
+                'Não seja assim',
+                'Vai me deixar sozinho?',
+                'Por favor',
+                'Nem tenta',
+                'Clica no sim',
+                'Não faz isso comigo',
+                'Diz sim, vai',
+                'Vale a pena',
+                'Tá difícil, hein',
+                'O botão foge',
+                'Desiste'
+            ];
+
+            let idx = 0;
+
+            function foge() {
+                const maxX = Math.min(window.innerWidth * 0.2, 100);
+                const maxY = Math.min(window.innerHeight * 0.15, 60);
+                const randX = (Math.random() * 2 - 1) * maxX;
+                const randY = (Math.random() * 2 - 1) * maxY;
+
+                btnNao.style.transform = `translate(${randX}px, ${randY}px)`;
+
+                idx = (idx + 1) % frases.length;
+                btnNao.textContent = frases[idx];
+            }
+
+            btnNao.addEventListener('mouseenter', foge);
+            btnNao.addEventListener('click', function(e) {
+                e.preventDefault();
+                foge();
+            });
+            btnNao.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                foge();
+            }, { passive: false });
+
+            btnSim.addEventListener('click', function() {
+                feedback.textContent = 'Que bom. Me chama pra gente marcar.';
+                feedback.classList.add('show');
+
+                btnNao.style.display = 'none';
+                btnSim.textContent = 'Combinado';
+                btnSim.style.background = '#4a4440';
+            });
+        })();
+    </script>
+</body>
+</html>
